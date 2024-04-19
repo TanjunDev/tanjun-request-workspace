@@ -75,9 +75,8 @@ export class TanjunHttp {
    */
   get<T>(url: string, params?: any): Observable<T> {
     return this._http
-      .get<T>(this._baseUrl + url, {
+      .get<T>(this.buildCompleteURL(url, params), {
         headers: this.httpOptionsJson,
-        params,
       })
       .pipe(catchError((error) => throwError(this.handleError(error)))); // <-- Still working on this deprecated method
   }
@@ -91,7 +90,7 @@ export class TanjunHttp {
    */
   post<T>(url: string, body: any): Observable<T> {
     return this._http
-      .post<T>(this._baseUrl + url, body, {
+      .post<T>(this.buildCompleteURL(url), body, {
         headers: this.httpOptionsJson,
       })
       .pipe(catchError((error) => throwError(this.handleError(error)))); // <-- Still working on this deprecated method
@@ -106,7 +105,7 @@ export class TanjunHttp {
    */
   put<T>(url: string, body: any): Observable<T> {
     return this._http
-      .put<T>(this._baseUrl + url, body, {
+      .put<T>(this.buildCompleteURL(url), body, {
         headers: this.httpOptionsJson,
       })
       .pipe(catchError((error) => throwError(this.handleError(error)))); // <-- Still working on this deprecated method
@@ -121,7 +120,7 @@ export class TanjunHttp {
    */
   delete<T>(url: string, params: any): Observable<T> {
     return this._http
-      .delete<T>(this._baseUrl + url, {
+      .delete<T>(this.buildCompleteURL(url, params), {
         headers: this.httpOptionsJson,
         params,
       })
@@ -140,7 +139,7 @@ export class TanjunHttp {
    */
   getBlob(url: string, params: any): Observable<any> {
     return this._http
-      .get(this._baseUrl + url, {
+      .get(this.buildCompleteURL(url, params), {
         headers: this.httpOptionsBlob,
         responseType: 'blob',
         params,
@@ -161,5 +160,24 @@ export class TanjunHttp {
     };
 
     return errorMessage;
+  }
+
+  buildCompleteURL(url: string, params?: any): string {
+    let apiUrl = this._baseUrl + url;
+    // Add parameters to the URL
+    if (params) {
+      // If single parameter
+      if (typeof params === 'string') {
+        apiUrl += `/${params}`;
+      } else {
+        // If multiple parameters
+        for (let key in params) {
+          if (params.hasOwnProperty(key)) {
+            apiUrl += `/${params[key]}`;
+          }
+        }
+      }
+    }
+    return apiUrl;
   }
 }
