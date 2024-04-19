@@ -153,21 +153,50 @@ export class TanjunHttp {
   }
 
   buildCompleteURL(url: string, params?: any): string {
+    // Check if _baseUrl ends with a slash
+    if (this._baseUrl && !this._baseUrl.endsWith('/')) {
+      this._baseUrl += '/';
+    }
+
+    // Check if url starts with a slash
+    if (url.startsWith('/')) {
+      url = url.substring(1);
+    }
+
+    // Check if url ends with a slash
+    if (url.endsWith('/')) {
+      url = url.substring(0, url.length - 1);
+    }
+
+
     let apiUrl = this._baseUrl + url;
     // Add parameters to the URL
     if (params) {
       // If single parameter
       if (typeof params === 'string') {
+        // Check if parameter starts with a slash
+        if (params.startsWith('/')) {
+          params = params.substring(1);
+        }
+
+
         apiUrl += `/${params}`;
       } else {
         // If multiple parameters
         for (let key in params) {
           if (params.hasOwnProperty(key)) {
+            // Check if parameter starts with a slash
+            if (params[key].startsWith('/')) {
+              params[key] = params[key].substring(1);
+            }
             apiUrl += `/${params[key]}`;
           }
         }
       }
     }
+
+    console.log(apiUrl);
+
     return apiUrl;
   }
 }
