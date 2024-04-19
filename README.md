@@ -1,4 +1,4 @@
-# `Tanjun Request` - A simple HTTP request library 
+# `Tanjun Request` - A simple HTTP request library
 
 ![Contributors][contributors-shield]
 ![Forks][forks-shield]
@@ -6,6 +6,31 @@
 ![Issues][issues-shield]
 ![MIT License][license-shield]
 ![LinkedIn][linkedin-shield]
+
+<br />
+<p align="center">
+  <h3 align="center">Tanjun Request</h3>
+
+  <p align="center">
+    A simple HTTP request library
+    <br />
+    <a href="https://github.com/tanjunDev/tanjun-request-workspace"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/tanjunDev/tanjun-request-workspace/issues">
+    Bug Report
+    </a>
+    ·
+    <a href="https://github.com/tanjunDev/tanjun-request-workspace/issues">Ask for help</a>
+  </p>
+</p>
+
+## About The Project
+
+This is a simple HTTP request library that allows you to make requests to a server and get the response back.
+
+
+## Latest Version
 
 | Version | Date       |
 | ------- | ---------- |
@@ -17,14 +42,8 @@
 
 <!-- References -->
 [contributors-shield]: https://img.shields.io/github/contributors/TanjunDev/tanjun-request-workspace.svg?style=for-the-badge
-[contributors-url]: https://github.com/TanjunDev/TanjunDev-request-workspace/graphs/contributors
 [forks-shield]: https://img.shields.io/github/forks/TanjunDev/tanjun-request-workspace.svg?style=for-the-badge
-[forks-url]: https://github.com/TanjunDev/tanjun-request-workspace/network/members
 [stars-shield]: https://img.shields.io/github/stars/TanjunDev/tanjun-request-workspace.svg?style=for-the-badge
-[stars-url]: https://github.com/TanjunDev/tanjun-request-workspace/stargazers
 [issues-shield]: https://img.shields.io/github/issues/TanjunDev/tanjun-request-workspace.svg?style=for-the-badge
-[issues-url]: https://github.com/tanjun/TanjunDev-request-workspace/issues
 [license-shield]: https://img.shields.io/github/license/TanjunDev/tanjun-request-workspace.svg?style=for-the-badge
-[license-url]: https://github.com/TanjunDev/tanjun-request-workspace/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://www.linkedin.com/in/ehitel-rodriguez-316a9b217/
