@@ -9,6 +9,14 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true,
+    "paths": {
+      "my-lib": [
+        "./dist/my-lib"
+      ],
+      "tanjun-request": [
+        "./dist/tanjun-request"
+      ]
+    },
     "esModuleInterop": true,
     "sourceMap": true,
     "declaration": false,
