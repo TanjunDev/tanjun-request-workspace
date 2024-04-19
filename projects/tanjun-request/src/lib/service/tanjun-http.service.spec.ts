@@ -23,7 +23,7 @@ describe('TanjunRequestService', () => {
       ''
     );
 
-    service.get('selectByCompany', '0001').subscribe({
+    service.get('', '').subscribe({
       next: (response) => {
         console.log(response);
       },

@@ -1,4 +1,8 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 import { HttpErrorModel } from '../models';
@@ -16,14 +20,8 @@ export class TanjunHttp {
   private _baseUrl: string | null = null;
 
   // Options for sending form data
-  httpOptionsJson = new HttpHeaders({
+  httpHeaders = new HttpHeaders({
     'Content-Type': 'application/json; charset=utf-8',
-  });
-
-  // Options for blob response
-  httpOptionsBlob = new HttpHeaders({
-    responseType: 'blob',
-    observe: 'response',
   });
 
   /**
@@ -44,14 +42,7 @@ export class TanjunHttp {
    * Set the authorization token for the request
    */
   setAuthorizationToken(token: string) {
-    this.httpOptionsJson = this.httpOptionsJson.set(
-      'Authorization',
-      `Bearer ${token}`
-    );
-    this.httpOptionsBlob = this.httpOptionsBlob.set(
-      'Authorization',
-      `Bearer ${token}`
-    );
+    this.httpHeaders = this.httpHeaders.set('Authorization', `Bearer ${token}`);
   }
 
   /**
@@ -76,9 +67,9 @@ export class TanjunHttp {
   get<T>(url: string, params?: any): Observable<T> {
     return this._http
       .get<T>(this.buildCompleteURL(url, params), {
-        headers: this.httpOptionsJson,
+        headers: this.httpHeaders,
       })
-      .pipe(catchError((error) => throwError(this.handleError(error)))); // <-- Still working on this deprecated method
+      .pipe(catchError(this.handleError.bind(this))); // <-- Still working on this deprecated method
   }
 
   /**
@@ -91,9 +82,9 @@ export class TanjunHttp {
   post<T>(url: string, body: any): Observable<T> {
     return this._http
       .post<T>(this.buildCompleteURL(url), body, {
-        headers: this.httpOptionsJson,
+        headers: this.httpHeaders,
       })
-      .pipe(catchError((error) => throwError(this.handleError(error)))); // <-- Still working on this deprecated method
+      .pipe(catchError(this.handleError.bind(this))); // <-- Still working on this deprecated method
   }
 
   /**
@@ -106,9 +97,9 @@ export class TanjunHttp {
   put<T>(url: string, body: any): Observable<T> {
     return this._http
       .put<T>(this.buildCompleteURL(url), body, {
-        headers: this.httpOptionsJson,
+        headers: this.httpHeaders,
       })
-      .pipe(catchError((error) => throwError(this.handleError(error)))); // <-- Still working on this deprecated method
+      .pipe(catchError(this.handleError.bind(this))); // <-- Still working on this deprecated method
   }
 
   /**
@@ -121,10 +112,10 @@ export class TanjunHttp {
   delete<T>(url: string, params: any): Observable<T> {
     return this._http
       .delete<T>(this.buildCompleteURL(url, params), {
-        headers: this.httpOptionsJson,
+        headers: this.httpHeaders,
         params,
       })
-      .pipe(catchError((error) => throwError(this.handleError(error)))); // <-- Still working on this deprecated method
+      .pipe(catchError(this.handleError.bind(this))); // <-- Still working on this deprecated method
   }
 
   /**
@@ -140,11 +131,11 @@ export class TanjunHttp {
   getBlob(url: string, params: any): Observable<any> {
     return this._http
       .get(this.buildCompleteURL(url, params), {
-        headers: this.httpOptionsBlob,
-        responseType: 'blob',
+        headers: this.httpHeaders,
+        responseType: 'blob' as 'json',
         params,
       })
-      .pipe(catchError((error) => throwError(this.handleError(error)))); // <-- Still working on this deprecated method
+      .pipe(catchError(this.handleError.bind(this))); // <-- Still working on this deprecated method
   }
 
   /**
@@ -153,31 +144,59 @@ export class TanjunHttp {
   /**
    * @param error
    */
-  private handleError(error: Response | any): HttpErrorModel {
-    let errorMessage: HttpErrorModel = {
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    const errorMessage: HttpErrorModel = {
       code: error.status,
       message: error.message,
     };
-
-    return errorMessage;
+    return throwError(errorMessage);
   }
 
   buildCompleteURL(url: string, params?: any): string {
+    // Check if _baseUrl ends with a slash
+    if (this._baseUrl && !this._baseUrl.endsWith('/')) {
+      this._baseUrl += '/';
+    }
+
+    // Check if url starts with a slash
+    if (url.startsWith('/')) {
+      url = url.substring(1);
+    }
+
+    // Check if url ends with a slash
+    if (url.endsWith('/')) {
+      url = url.substring(0, url.length - 1);
+    }
+
+
     let apiUrl = this._baseUrl + url;
     // Add parameters to the URL
     if (params) {
       // If single parameter
       if (typeof params === 'string') {
+        // Check if parameter starts with a slash
+        if (params.startsWith('/')) {
+          params = params.substring(1);
+        }
+
+
         apiUrl += `/${params}`;
       } else {
         // If multiple parameters
         for (let key in params) {
           if (params.hasOwnProperty(key)) {
+            // Check if parameter starts with a slash
+            if (params[key].startsWith('/')) {
+              params[key] = params[key].substring(1);
+            }
             apiUrl += `/${params[key]}`;
           }
         }
       }
     }
+
+    console.log(apiUrl);
+
     return apiUrl;
   }
 }
